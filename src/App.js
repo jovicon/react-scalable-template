@@ -7,6 +7,12 @@ import {
   withRouter
 } from 'react-router-dom'
 
+// components
+import { Login } from './components/pages';
+
+// hooks
+import { useSemiPersistentState } from './hooks'
+
 // reducers
 import { authReducer } from './reducer';
 
@@ -16,67 +22,59 @@ import { PrivateRoute } from './router';
 const Public = () => <h3>Public</h3>
 const Protected = () => <h3>Protected</h3>
 
-// debo hacer un custom hook para poder englobar el login
-
-class Login extends React.Component {
-  state = {
-    redirectToReferrer: false
-  }
-  login = () => {
-    auth.authenticate(() => {
-      this.setState(() => ({
-        redirectToReferrer: true
-      }))
-    })
-  }
-  render() {
-    const { from } = this.props.location.state || { from: { pathname: '/' } }
-    const { redirectToReferrer } = this.state
-
-    if (redirectToReferrer === true) {
-      return <Redirect to={from} />
-    }
-
-    return (
-      <div>
-        <p>You must log in to view the page</p>
-        <button onClick={this.login}>Log in</button>
-      </div>
-    )
-  }
-}
+// const fakeAuth = {
+//   isAuthenticated: false,
+//   authenticate(cb) {
+//     this.isAuthenticated = true
+//     setTimeout(cb, 100) // fake async
+//   },
+//   signout(cb) {
+//     this.isAuthenticated = false
+//     setTimeout(cb, 100) // fake async
+//   }
+// }
 
 
+export const App = props => {
 
-const AuthButton = withRouter(({ history }) => (
-  auth.isAuthenticated
-    ? <p>
-        Welcome! <button onClick={() => {
-          auth.signout(() => history.push('/'))
-        }}>Sign out</button>
-      </p>
-    : <p>You are not logged in.</p>
-))
-
-export const App = () => {
-  const [auth, dispatchAuth] = React.useReducer(
+  const isAuthenticated = localStorage.getItem('isAuthenticated') ? Boolean(localStorage.getItem('isAuthenticated')) : false;
+  const [user, dispatchUser] = React.useReducer(
     authReducer,
-    { data: [], isAuthenticated: false, isLoading: false, isError: false }
+    { data: [], isAuthenticated: isAuthenticated, isLoading: false, isError: false }
   );
+  console.log(user);
+  
+
+  // const [user, setUser] = useSemiPersistentState(
+  //   'user',
+  //   { isAuthenticated: false, data: [] }
+  // );
+
+  const handleSignIn = event => {
+    console.log("handleSignIn: ", event);
+  }
 
   return (
     <Router>
       <div>
-        <AuthButton />
 
         <ul>
           <li><Link to="/public">Public Page</Link></li>
           <li><Link to="/protected">Protected Page</Link></li>
         </ul>
-        
+
+        {/* <Redirect exact from="/" to="/login" /> */}
         <Route path="/public" component={Public} />
-        <Route path="/login" component={Login} />
-        <PrivateRoute path='/protected' auth={auth} component={Protected}  />
+        <Route path="/login" user={user} component={Login} />
+        
+        {/* <Route>
+          <Login 
+            path="/login"
+            onSignIn={loginstatus => {console.log(loginstatus)}}  
+          />
+        </Route> */}
+
+        <PrivateRoute path='/protected' auth={user} component={Protected}  />
       </div>
     </Router>
   )
