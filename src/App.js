@@ -1,82 +1,58 @@
 import React from "react"
+import { Provider } from "react-redux";
 import {
-  BrowserRouter as Router, 
+  BrowserRouter as Router,
   Link,
   Route,
   Redirect,
-  withRouter
 } from 'react-router-dom'
 
-// components
 import { Login } from './components/pages';
-
-// hooks
-import { useSemiPersistentState } from './hooks'
-
-// reducers
-import { authReducer } from './reducer';
-
-// router
+import { useSemiPersistentState } from './hooks';
 import { PrivateRoute } from './router';
 
+import { store } from "./store";
+
 const Public = () => <h3>Public</h3>
-const Protected = () => <h3>Protected</h3>
+const ProtectedOne = () => <h3>Protected 1</h3>
+const ProtectedTwo = () => <h3>Protected 2</h3>
 
-// const fakeAuth = {
-//   isAuthenticated: false,
-//   authenticate(cb) {
-//     this.isAuthenticated = true
-//     setTimeout(cb, 100) // fake async
-//   },
-//   signout(cb) {
-//     this.isAuthenticated = false
-//     setTimeout(cb, 100) // fake async
-//   }
-// }
-
-
-export const App = props => {
-
-  const isAuthenticated = localStorage.getItem('isAuthenticated') ? Boolean(localStorage.getItem('isAuthenticated')) : false;
-  const [user, dispatchUser] = React.useReducer(
-    authReducer,
-    { data: [], isAuthenticated: isAuthenticated, isLoading: false, isError: false }
-  );
-  console.log(user);
-  
-
-  // const [user, setUser] = useSemiPersistentState(
-  //   'user',
-  //   { isAuthenticated: false, data: [] }
-  // );
-
-  const handleSignIn = event => {
-    console.log("handleSignIn: ", event);
-  }
-
+// Protected Example
+const Protected = props => {
+  const pathOne = `${props.match.path}/one`;
+  const pathTwo = `${props.match.path}/two`;
   return (
-    <Router>
-      <div>
+    <>
+      <Route path={pathOne} component={ProtectedOne}/>
+      <Route path={pathTwo} component={ProtectedTwo}/>
+    </>
+  );
+}
 
-        <ul>
-          <li><Link to="/public">Public Page</Link></li>
-          <li><Link to="/protected">Protected Page</Link></li>
-        </ul>
+export const App = () => {
+  return (
+    <Provider store={store}>
+      <Router>
+        <div>
 
-        {/* <Redirect exact from="/" to="/login" /> */}
-        <Route path="/public" component={Public} />
-        <Route path="/login" user={user} component={Login} />
-        
-        {/* <Route>
-          <Login 
-            path="/login"
-            onSignIn={loginstatus => {console.log(loginstatus)}}  
-          />
-        </Route> */}
+          <ul>
+            <li><Link to="/login">Login</Link></li>
+            <li><Link to="/public">Public Page</Link></li>
+            <li><Link to="/app/one">Protected Page One</Link></li>
+            <li><Link to="/app/two">Protected Page Two</Link></li>
+          </ul>
 
-        <PrivateRoute path='/protected' auth={user} component={Protected}  />
-      </div>
-    </Router>
+          <Redirect exact from="/" to="/login" />
+
+          <Route path="/public" component={Public}/>
+
+          <Route path="/login" component={Login} />
+
+          <PrivateRoute path='/app' component={Protected}/>
+
+        </div>
+      </Router>
+    </Provider>
   )
 }
 

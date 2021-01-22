@@ -1,4 +1,11 @@
-const authReducer = (state, action) => {
+const defaultState = {
+  data: [],
+  isAuthenticated: false,
+  isLoading: false,
+  isError: false
+}
+
+export const auth = (state = defaultState, action) => {
     switch (action.type) {
       case 'AUTH_LOGIN_INIT':
         return {
@@ -9,9 +16,18 @@ const authReducer = (state, action) => {
       case 'AUTH_LOGIN_SUCCESS':
         return {
           ...state,
+          isAuthenticated: true,
           isLoading: false,
           isError: false,
-          data: action.payload,
+          data: [],
+        };
+      case 'AUTH_LOGOUT_SUCCESS':
+        return {
+          ...state,
+          isAuthenticated: false,
+          isLoading: false,
+          isError: false,
+          data: [],
         };
     //   case 'STORIES_FETCH_FAILURE':
     //     return {
@@ -27,8 +43,6 @@ const authReducer = (state, action) => {
     //       ),
     //     };
       default:
-        throw new Error();
+        return state;
     }
 };
-
-export default authReducer;
