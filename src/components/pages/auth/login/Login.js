@@ -7,11 +7,13 @@ import {
   mapDispatchToProps
 } from '../../../../reducer/handlers/auth';
 
+import {
+  FirstBlog
+} from '../../../organisms/Blog/index';
+
 const Login =  withRouter(({ history, auth, ...props })  => {
   const user = {props};
   const { handleSignIn, handleSignOut } = props;
-
-
 
   // const AuthButton = withRouter(({ history }) => (
   //   auth.isAuthenticated
@@ -40,6 +42,8 @@ const Login =  withRouter(({ history, auth, ...props })  => {
             handleSignOut();
             history.push('/login')
           }}>Sign out</button>
+
+          <FirstBlog/>
         </p> 
         : 
         <div>
