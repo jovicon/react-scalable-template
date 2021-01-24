@@ -18,4 +18,3 @@ export const theme = {
   greenSecondary: '#04C880',
   blackSecondary: "#141414"
 };
-  
