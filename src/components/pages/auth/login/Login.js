@@ -5,15 +5,22 @@ import { connect } from "react-redux";
 import {
   mapStateToProps,
   mapDispatchToProps
-} from '../../../../reducer/handlers/auth';
+} from '../../../../reducer/auth/authHandlers';
+
+import {
+  handleLogin
+} from '../../../../hooks/auth/login';
+
 
 import {
   FirstBlog
 } from '../../../organisms/Blog/index';
 
+// unir todo en el hook
 const Login =  withRouter(({ history, auth, ...props })  => {
-  const user = {props};
-  const { handleSignIn, handleSignOut } = props;
+  // const { handleSignInDispatch, handleSignOutDispatch } = props;
+  const { handleSignOutDispatch } = props;
+  const { handleSignIn } = handleLogin();
 
   // const AuthButton = withRouter(({ history }) => (
   //   auth.isAuthenticated
@@ -39,12 +46,12 @@ const Login =  withRouter(({ history, auth, ...props })  => {
       { auth.isAuthenticated ?
         <p>
           Welcome! <button onClick={() => {
-            handleSignOut();
-            history.push('/login')
+            handleSignOutDispatch();
+            history.push('/login');
           }}>Sign out</button>
 
           <FirstBlog/>
-        </p> 
+        </p>
         : 
         <div>
           <p>

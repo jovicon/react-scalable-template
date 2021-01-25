@@ -1,1 +1,1 @@
-export { default as useSemiPersistentState } from './useSemiPersistenceState';
+export { default as useSemiPersistentState } from './shared/useSemiPersistenceState';
