@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import {
   mapStateToProps,
   mapDispatchToProps
-} from '../../../../reducer/handlers/auth';
+} from '../../../../reducer/auth/handlers/auth';
 
 import {
   FirstBlog
