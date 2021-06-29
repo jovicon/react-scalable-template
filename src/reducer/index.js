@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { auth } from './auth/states/auth';
+import { auth } from './auth/authStates';
 
 export default combineReducers({
   auth,

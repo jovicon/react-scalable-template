@@ -4,10 +4,10 @@ export const mapStateToProps = state => {
 };
   
 export const mapDispatchToProps = dispatch => ({
-  handleSignIn: () => {
+  handleSignInDispatch: () => {
       dispatch({ type: "AUTH_LOGIN_SUCCESS" });
   },
-  handleSignOut: () => {
+  handleSignOutDispatch: () => {
       dispatch({ type: "AUTH_LOGOUT_SUCCESS" });
   }
 });
