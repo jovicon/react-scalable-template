@@ -13,7 +13,10 @@ import { PrivateRoute } from './router';
 
 import { store } from "./store";
 
-const Public = () => <h3>Public</h3>
+const Public = async () => {
+
+  return <h3>Public</h3>
+}
 const ProtectedOne = () => <h3>Protected 1</h3>
 const ProtectedTwo = () => <h3>Protected 2</h3>
 
